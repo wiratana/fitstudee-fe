@@ -19,10 +19,10 @@ export default function Login(){
 								<input id="password" type="text" name="password" className="bg-gray-200 rounded-md p-1"/>
 							</div>
 							<div className="input-group my-3">
-								<a href="/app/initial-setup/form" className="bg-sky-500 rounded-md px-2 py-1 text-gray-100">Submit</a>
+								<Link href="/app/initial-setup/form" className="bg-sky-500 rounded-md px-2 py-1 text-gray-100">Submit</Link>
 							</div>
 							<div className="text-container">
-								Don't have account ? <a href="/auth/register" className="text-sky-900">Let's register</a>
+								Don't have account ? <Link href="/auth/register" className="text-sky-900">Let's register</Link>
 							</div>
 						</div>
 					</div>

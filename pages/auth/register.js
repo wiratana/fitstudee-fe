@@ -1,3 +1,5 @@
+import Link from 'next/link'
+
 export default function Register(){
 	return (
 		<section>
@@ -21,10 +23,10 @@ export default function Register(){
 								<input id="password" type="text" name="password" className="bg-gray-200 rounded-md p-1"/>
 							</div>
 							<div className="input-group my-3">
-								<a href="/app/initial-setup/form" className="bg-sky-500 rounded-md px-2 py-1 text-gray-100">Submit</a>
+								<Link href="/app/initial-setup/form" className="bg-sky-500 rounded-md px-2 py-1 text-gray-100">Submit</Link>
 							</div>
 							<div className="text-container">
-								Already have account ? <a href="/auth/login" className="text-sky-900">Let's login</a>
+								Already have account ? <Link href="/auth/login" className="text-sky-900">Let's login</Link>
 							</div>
 						</div>
 					</div>
