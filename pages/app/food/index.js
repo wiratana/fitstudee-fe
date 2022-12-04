@@ -1,4 +1,5 @@
 import React, {useState} from 'react'
+import Image from 'next/image'
 
 const nutritionNeeds = [
 	{
@@ -99,7 +100,7 @@ export default function Food(){
 								<div key={nutrition.name} className={"card  group hover:w-full duration-700"}>
 									<div className={`flex m-[10px] p-[10px] hover:m-[0px] bg-gray-900 hover:p-[20px] hover:rounded-3xl duration-300 rounded-md align-center`}>
 										<div className="img-container w-fit">
-											<img src="{nutrition.image}" alt=""/>
+											<Image src="{nutrition.image}" alt=""/>
 										</div>
 										<div className="text-container text-sky-400 flex items-center">
 											<div className="title inline-block">{nutrition.name}</div>
@@ -115,7 +116,7 @@ export default function Food(){
 															setCalories([...nutritions.values()].reduce((a,b) => a + b.cal, 0))
 														}}>
 															<div className="img-container w-fit">
-																<img src="{food.image}" alt=""/>
+																<Image src="{food.image}" alt=""/>
 															</div>
 															<div className="text-container text-sky-400">
 																<div className="title">{food.name}</div>
@@ -138,7 +139,7 @@ export default function Food(){
 								<div key={"item-"+index} className={"card  group hover:w-full duration-700"}>
 									<div className={`flex m-[10px] p-[10px] hover:m-[0px] bg-gray-900 hover:p-[20px] hover:rounded-3xl duration-300 rounded-md align-center flex-col`}>
 										<div className="img-container w-fit">
-											<img src="" alt=""/>
+											<Image src="" alt=""/>
 										</div>
 										<div className="text-container text-sky-400 flex items-center w-full justify-between">
 											<div className="title inline-block">{nutritionNeeds[index].foods[nutritions.get(index).id].name}</div>

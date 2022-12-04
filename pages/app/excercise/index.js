@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react'
+import Image from 'next/image'
 
 const excerciseLists = [
 	{
@@ -84,7 +85,7 @@ export default function Food(){
 										}}>
 											<div className={`flex m-[10px] p-[10px] hover:m-[0px] bg-gray-900 hover:p-[20px] hover:rounded-3xl duration-300 rounded-md align-center`}>
 												<div className="img-container w-fit">
-													<img src="{excercise.image}" alt=""/>
+													<Image src="{excercise.image}" alt=""/>
 												</div>
 												<div className="text-container text-sky-400 flex items-center">
 													<div className="title inline-block">{excercise.name}</div>
@@ -102,7 +103,7 @@ export default function Food(){
 										<div key={"item-"+index} className={"card  group hover:w-full duration-700"}>
 											<div className={`flex m-[10px] p-[10px] hover:m-[0px] bg-gray-900 hover:p-[20px] hover:rounded-3xl duration-300 rounded-md align-center flex-col`}>
 												<div className="img-container w-fit">
-													<img src="" alt=""/>
+													<Image src="" alt=""/>
 												</div>
 												<div className="text-container text-sky-400 flex items-center w-full justify-between">
 													<div className="title inline-block">{excercises.get(index).name}</div>

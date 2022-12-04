@@ -1,4 +1,5 @@
 import React, {useState} from 'react'
+import Image from 'next/image'
 
 export default function Water(){
 	const [limit, setLimit] = useState(0)
@@ -31,7 +32,7 @@ export default function Water(){
 					<div className="flex-col form mx-auto w-2/3 bg-gray-100 p-5 rounded-xl shadow flex">
 						{[...logs.keys()].map(function(index){
 							return (
-								<div className={"card  group hover:w-full duration-700"}>
+								<div key={"log-"+index} className={"card  group hover:w-full duration-700"}>
 									<div className={`flex m-[10px] p-[10px] hover:m-[0px] bg-gray-900 hover:p-[20px] hover:rounded-3xl duration-300 rounded-md align-center flex-col`}>
 										<div className="text-container text-sky-400 flex items-center w-full justify-between">
 											<div className="title inline-block"><strong>{logs.get(index).amount} Ml</strong> {logs.get(index).time}</div>

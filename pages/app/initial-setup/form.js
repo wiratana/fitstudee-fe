@@ -1,4 +1,5 @@
 import React, {useState} from 'react'
+import Image from 'next/image'
 
 const bodyPreferences = [
 		{
@@ -92,7 +93,7 @@ export default function Form(){
 								<div key={element.title} className="card w-1/4" onClick={() => setPreference(element.id)}>
 									<div className={`m-[10px] ${preference == element.id ? 'bg-gray-500' : 'bg-gray-900'} p-[10px] hover:m-[0px] hover:p-[20px] hover:rounded-3xl duration-300 rounded-md`}>
 										<div className="img-container w-fit">
-											<img src="{element.image}" alt=""/>
+											<Image src="{element.image}" alt=""/>
 										</div>
 										<div className="text-container text-sky-400">
 											<div className="title">{element.title}</div>
@@ -120,7 +121,7 @@ export default function Form(){
 								<div key={element.title} className="card w-1/3" onClick={() => setLevel(element.id)}>
 									<div className={`m-[10px] ${level == element.id ? 'bg-gray-500' : 'bg-gray-900'} p-[10px] hover:m-[0px] hover:p-[20px] hover:rounded-3xl duration-300 rounded-md`}>
 										<div className="img-container w-fit">
-											<img src="{element.image}" alt=""/>
+											<Image src="{element.image}" alt=""/>
 										</div>
 										<div className="text-container text-sky-400">
 											<div className="title">{element.title}</div>
@@ -150,7 +151,7 @@ export default function Form(){
 
 	const nextButton = () => {
 		return (step == 3) 
-			? <a href="/app/food" className="block bg-sky-500 rounded-md px-2 py-1 text-gray-100">Save</a>
+			? <Link href="/app/food" className="block bg-sky-500 rounded-md px-2 py-1 text-gray-100">Save</Link>
 			: <button className="block bg-sky-500 rounded-md px-2 py-1 text-gray-100" onClick={next}>Next</button>
 	}
 
