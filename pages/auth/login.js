@@ -42,10 +42,10 @@ export default function Login(){
         .then((res) => res.json())
         .then(async (data) => {
             localStorage.setItem("user", data)
-            console.log("babi satu ini")
             if(!data.detail.initialization_status)
                 router.push('/app/initial-setup/form')
-            router.push('/app')
+            else
+                router.push('/app')
         })
     }
     
