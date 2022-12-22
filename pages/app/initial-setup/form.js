@@ -65,7 +65,7 @@ export default function Form(){
         event.preventDefault()
 
         const data = {
-            initialization_status:false,
+            initialization_status:true,
             height: parseInt(height),
             weight: parseInt(weight),
             age: parseInt(age),
