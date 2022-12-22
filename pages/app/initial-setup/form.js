@@ -1,33 +1,7 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-
-const bodyPreferences = [
-		{
-			id:"0",
-			image:"https://via.placeholder.com/150",
-			title:"Legs Focus",
-			description:"make your leg bigger like BAKI"
-		},
-		{
-			id:"1",
-			image:"https://via.placeholder.com/150",
-			title:"Basic Body",
-			description:"create basic body but aesthetic like EREN"
-		},
-		{
-			id:"2",
-			image:"https://via.placeholder.com/150",
-			title:"Back Focus",
-			description:"Make your back wider and stronger like Garou"
-		},
-		{
-			id:"3",
-			image:"https://via.placeholder.com/150",
-			title:"Chest Focus",
-			description:"Bigger chest, bigger power"
-		}
-	]
+import { useRouter } from 'next/router'
 
 const levels = [
 	{
@@ -52,15 +26,74 @@ const levels = [
 
 
 export default function Form(){
+    const router = useRouter()
 	const [step, setStep] 			  = useState(0)
 	const [height, setHeight]		  = useState(0)
 	const [weight, setWeight]		  = useState(0)
-	const [preference, setPreference] = useState(-1)
+    const [age, setAge]               = useState(0)
+    const [sex, setSex]               = useState("")
+	const [preference, setPreference] = useState("")
 	const [level, setLevel] 		  = useState(-1)
+    const [bmi, setBMI]               = useState(0)
+    const [calNeed, setCalNeed]       = useState(0)
+    const [status, setStatus]         = useState("")
+    const [bodyPreferences, setBodyPreferences] = useState([])
 
-	const next = () => setStep(Math.min((step+1), 3))
+	const next = () => setStep(Math.min((step+1), 2))
 
 	const prev = () => setStep(Math.max((step-1), 0))
+    
+    const calculateBMI = () => {
+        setBMI((height & weight) ? (weight/Math.pow(height/10, 2))*100 : 0)
+        setStatus(bmi < 18.5 ? "underweight" : bmi > 25 ? "overweight" : "normal")
+        setCalNeed(bmi < 18.5 ? 3500 : bmi > 25 ? 2500 : 3000)
+    }
+    
+    useEffect(() => {
+        async function fetchBodyPref(){
+            await fetch("http://localhost:5000/body-pref")
+            .then((res) => res.json())
+            .then(async (data) => {
+                setBodyPreferences(data)
+            })
+        }
+        
+        fetchBodyPref()
+    }, [])
+    
+    const handleSubmit = async (event) => {
+        event.preventDefault()
+
+        const data = {
+            initialization_status:false,
+            height: parseInt(height),
+            weight: parseInt(weight),
+            age: parseInt(age),
+            body_preference: preference,
+            level: parseInt(level),
+            sex: sex,
+            bmi: parseInt(bmi),
+            status: status,
+            calories_need: parseInt(calNeed)
+        }
+        
+        const JSONdata = JSON.stringify(data)
+        let endpoint = `http://localhost:5000/users/initial-setup/${localStorage.getItem('user_id')}`
+        let options = {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            'authorization': `Bearer ${localStorage.getItem('access-token')}`
+          },
+          body: JSONdata,
+        }
+        
+        await fetch(endpoint, options)
+        .then((res) => {
+            if(res.status == 403) router.push('/auth/login')
+            if(res.status == 200) router.push('/app')
+        })
+    }
 
 	const form = () => {
 		if(step == 0){
@@ -72,12 +105,21 @@ export default function Form(){
 					<div className="input-container text-center mx-auto">
 						<div className="input-group my-3">
 							<label htmlFor="height" className="mr-2">height</label>
-							<input id="height" type="number" name="height" className="bg-gray-200 rounded-md p-1" onChange={event => setHeight(event.target.value)} value={height || ""}/>
+							<input id="height" type="number" name="height" className="bg-gray-200 rounded-md p-1" onChange={event => {setHeight(event.target.value);calculateBMI()}} value={height || ""}/>
 						</div>							
 						<div className="input-group my-3">
 							<label htmlFor="weight" className="mr-2">weight</label>
-							<input id="weight" type="number" name="weight" className="bg-gray-200 rounded-md p-1" onChange={event => setWeight(event.target.value)} value={weight || ""}/>
+							<input id="weight" type="number" name="weight" className="bg-gray-200 rounded-md p-1" onChange={event => {setWeight(event.target.value);calculateBMI()}} value={weight || ""}/>
 						</div>
+                        <div className="input-group my-3">
+							<label htmlFor="age" className="mr-2">Age</label>
+							<input id="age" type="number" name="age" className="bg-gray-200 rounded-md p-1" onChange={event => setAge(event.target.value)} value={age || ""}/>
+						</div>
+                        <div className="input-group my-3">
+							<label htmlFor="age" className="mr-2">Age</label>
+                            <input type="radio" name="gender" value="male" onClick={event => setSex(event.target.value)}/> Male
+                            <input type="radio" name="gender" value="female" onClick={event => setSex(event.target.value)}/> Female
+                        </div>
 					</div>
 				</div>
 			)
@@ -91,13 +133,12 @@ export default function Form(){
 					<div className="card-container flex">
 						{bodyPreferences.map(function(element,i){
 							return (
-								<div key={element.title} className="card w-1/4" onClick={() => setPreference(element.id)}>
-									<div className={`m-[10px] ${preference == element.id ? 'bg-gray-500' : 'bg-gray-900'} p-[10px] hover:m-[0px] hover:p-[20px] hover:rounded-3xl duration-300 rounded-md`}>
+								<div key={`${i}-${element.name}`} className="card w-1/4" onClick={() => setPreference(element._id)}>
+									<div className={`m-[10px] ${preference == element._id ? 'bg-gray-500' : 'bg-gray-900'} p-[10px] hover:m-[0px] hover:p-[20px] hover:rounded-3xl duration-300 rounded-md`}>
 										<div className="img-container w-fit">
-											<Image src="{element.image}" alt=""/>
 										</div>
 										<div className="text-container text-sky-400">
-											<div className="title">{element.title}</div>
+											<div className="title">{element.name}</div>
 											<div className="description">
 												{element.description}
 											</div>
@@ -122,7 +163,6 @@ export default function Form(){
 								<div key={element.title} className="card w-1/3" onClick={() => setLevel(element.id)}>
 									<div className={`m-[10px] ${level == element.id ? 'bg-gray-500' : 'bg-gray-900'} p-[10px] hover:m-[0px] hover:p-[20px] hover:rounded-3xl duration-300 rounded-md`}>
 										<div className="img-container w-fit">
-											<Image src="{element.image}" alt=""/>
 										</div>
 										<div className="text-container text-sky-400">
 											<div className="title">{element.title}</div>
@@ -141,9 +181,14 @@ export default function Form(){
 		if(step == 3){
 			return(
 				<div>
+					<div className="m-[5px]">Age : {age | ""}</div>
+            		<div className="m-[5px]">Sex : {sex}</div>
 					<div className="m-[5px]">Height : {height | ""}</div>
 					<div className="m-[5px]">Weight : {weight | ""}</div>
-					<div className="m-[5px]">Body Preference : {(preference >= 0) ? bodyPreferences[preference].title : ""}</div>	
+					<div className="m-[5px]">Body Preference : {preference}</div>	
+                    <div className="m-[5px]">BMI : {bmi}</div>
+                    <div className="m-[5px]">Status : {status}</div>
+                    <div className="m-[5px]">Calories Need : {calNeed}</div>	
 					<div className="m-[5px]">Level : {(level >= 0) ? levels[level].title : ""}</div>	
 				</div>
 			)
@@ -151,8 +196,8 @@ export default function Form(){
 	}
 
 	const nextButton = () => {
-		return (step == 3) 
-			? <Link href="/app/food" className="block bg-sky-500 rounded-md px-2 py-1 text-gray-100">Save</Link>
+		return (step == 2) 
+			? <button className="block bg-sky-500 rounded-md px-2 py-1 text-gray-100" onClick={handleSubmit}>Save</button>
 			: <button className="block bg-sky-500 rounded-md px-2 py-1 text-gray-100" onClick={next}>Next</button>
 	}
 
