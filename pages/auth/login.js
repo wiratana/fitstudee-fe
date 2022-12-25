@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import Image from 'next/image'
 
 export default function Login(){
     const router = useRouter()
@@ -51,30 +52,33 @@ export default function Login(){
     
     return (
         <section>
-            <div className="bg-form h-screen bg-gray-800 flex items-center">
-                <div className="container mx-auto">
-                    <div className="form mx-auto w-1/3 bg-gray-100 p-5 rounded-xl shadow">
-                        <div className="text-container text-center">
-                            <h1 className="text-sky-900">Login</h1>
-                        </div>
-                        <form onSubmit={handleSubmit}>  
-                            <div className="input-container text-center mx-auto">
-                                <div className="input-group my-3">
-                                    <label htmlFor="name" className="mr-2">username</label>
-                                    <input id="name" type="text" name="name" className="bg-gray-200 rounded-md p-1"/>
-                                </div>
-                                <div className="input-group my-3">
-                                    <label htmlFor="password" className="mr-2">password</label>
-                                    <input id="password" type="text" name="password" className="bg-gray-200 rounded-md p-1"/>
-                                </div>
-                                <div className="input-group my-3">
-                                    <button type="submit" className="bg-sky-500 rounded-md px-2 py-1 text-gray-100">Submit</button>
-                                </div>
-                                <div className="text-container">
-                                    Don&apos;t have account ? <Link href="/auth/register" className="text-sky-900">Let&apos;s register</Link>
-                                </div>
+            <div className="bg-form h-screen base-background flex items-center">
+                <div className="w-full">
+                    <div className="bg-slate-50 w-1/2 h-screen flex items-center shadow">
+                        <div className="form mx-auto p-2">
+                            <div className="text-container text-center">
+                                <Image src="/assets/img/Logo.png" width={75} height={75} className="mx-auto"/>
+                                <h1 className="text-sky-900 text-2xl">Welcome To FitStudee</h1>
                             </div>
-                        </form>
+                            <form onSubmit={handleSubmit} className="mt-5">  
+                                <div className="input-container mx-auto">
+                                    <div className="input-group my-3">
+                                        <label htmlFor="name" className="block">username</label>
+                                        <input id="name" type="text" name="name" className="border-2 border-indigo-500 rounded-md p-1 w-full"/>
+                                    </div>
+                                    <div className="input-group my-3">
+                                        <label htmlFor="password" className="mr-2">password</label>
+                                        <input id="password" type="text" name="password" className="border-2 border-indigo-500 rounded-md p-1 w-full"/>
+                                    </div>
+                                    <div className="input-group my-3">
+                                        <button type="submit" className="base-background rounded-md px-2 py-1 text-slate-50 w-full">Submit</button>
+                                    </div>
+                                    <div className="text-container my-3">
+                                        Belum Punya Akun ? <Link href="/auth/register" className="text-sky-900">Yuk Daftar</Link>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
