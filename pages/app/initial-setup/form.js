@@ -99,24 +99,21 @@ export default function Form(){
 		if(step == 0){
 			return (
 				<div className="bmi-data">
-					<div className="text-container text-center">
-						<h1 className="text-sky-900">BMI</h1>
-					</div>
-					<div className="input-container text-center mx-auto">
+					<div className="input-container mx-auto">
 						<div className="input-group my-3">
-							<label htmlFor="height" className="mr-2">height</label>
-							<input id="height" type="number" name="height" className="bg-gray-200 rounded-md p-1" onChange={event => {setHeight(event.target.value);calculateBMI()}} value={height || ""}/>
+							<label htmlFor="height" className="block">height</label>
+							<input id="height" type="number" name="height" className="border-2 border-indigo-500 rounded-md p-1 w-full" onChange={event => {setHeight(event.target.value);calculateBMI()}} value={height || ""}/>
 						</div>							
 						<div className="input-group my-3">
-							<label htmlFor="weight" className="mr-2">weight</label>
-							<input id="weight" type="number" name="weight" className="bg-gray-200 rounded-md p-1" onChange={event => {setWeight(event.target.value);calculateBMI()}} value={weight || ""}/>
+							<label htmlFor="weight" className="block">weight</label>
+							<input id="weight" type="number" name="weight" className="border-2 border-indigo-500 rounded-md p-1 w-full" onChange={event => {setWeight(event.target.value);calculateBMI()}} value={weight || ""}/>
 						</div>
                         <div className="input-group my-3">
-							<label htmlFor="age" className="mr-2">Age</label>
-							<input id="age" type="number" name="age" className="bg-gray-200 rounded-md p-1" onChange={event => setAge(event.target.value)} value={age || ""}/>
+							<label htmlFor="age" className="block">Age</label>
+							<input id="age" type="number" name="age" className="border-2 border-indigo-500 rounded-md p-1 w-full" onChange={event => setAge(event.target.value)} value={age || ""}/>
 						</div>
                         <div className="input-group my-3">
-							<label htmlFor="age" className="mr-2">Age</label>
+							<label htmlFor="age" className="block">Sex</label>
                             <input type="radio" name="gender" value="male" onClick={event => setSex(event.target.value)}/> Male
                             <input type="radio" name="gender" value="female" onClick={event => setSex(event.target.value)}/> Female
                         </div>
@@ -127,22 +124,16 @@ export default function Form(){
 		if(step == 1){
 			return (
 				<div className="body-preference">
-					<div className="text-container text-center">
-						<h1 className="text-sky-900">Body Preference</h1>
-					</div>
-					<div className="card-container flex">
+					<div className="card-container flex justify-center">
 						{bodyPreferences.map(function(element,i){
 							return (
-								<div key={`${i}-${element.name}`} className="card w-1/4" onClick={() => setPreference(element._id)}>
-									<div className={`m-[10px] ${preference == element._id ? 'bg-gray-500' : 'bg-gray-900'} p-[10px] hover:m-[0px] hover:p-[20px] hover:rounded-3xl duration-300 rounded-md`}>
-										<div className="img-container w-fit">
-										</div>
-										<div className="text-container text-sky-400">
-											<div className="title">{element.name}</div>
-											<div className="description">
-												{element.description}
-											</div>
-										</div>
+								<div key={`${i}-${element.name}`} className={`shadow rounded-md overflow-hidden m-[10px] ${preference == element._id ? 'bg-slate-500' : 'bg-slate-900'} card w-1/${bodyPreferences.length} pb-[10px] hover:drop-shadow-2xl duration-300`} onClick={() => setPreference(element._id)}>
+                                    <Image src="/assets/img/example.jpeg" width={200} height={200} className="object-fill"/>
+									<div className="text-container p-[5px_10px]">
+                                        <div className="title text-xl text-sky-500 font-semibold mb-[10px]">{element.name}</div>
+                                        <div className="description text-sky-300 font-light">
+                                            {element.description}
+                                        </div>
 									</div>
 								</div>
 							)	
@@ -154,22 +145,16 @@ export default function Form(){
 		if(step == 2){
 			return(
 				<div className="level">
-					<div className="text-container text-center">
-						<h1 className="text-sky-900">Level</h1>
-					</div>
 					<div className="card-container flex">
 						{levels.map(function(element,i){
 							return (
-								<div key={element.title} className="card w-1/3" onClick={() => setLevel(element.id)}>
-									<div className={`m-[10px] ${level == element.id ? 'bg-gray-500' : 'bg-gray-900'} p-[10px] hover:m-[0px] hover:p-[20px] hover:rounded-3xl duration-300 rounded-md`}>
-										<div className="img-container w-fit">
-										</div>
-										<div className="text-container text-sky-400">
-											<div className="title">{element.title}</div>
-											<div className="description">
-												{element.description}
-											</div>
-										</div>
+								<div key={element.title} className={`shadow rounded-md overflow-hidden m-[10px] ${level == element.id ? 'bg-slate-500' : 'bg-slate-900'} card w-1/${levels.length} pb-[10px] hover:drop-shadow-2xl duration-300`} onClick={() => setLevel(element.id)}>
+                                    <Image src="/assets/img/example.jpeg" width={200} height={200} className="object-fill"/>
+                                    <div className="text-container p-[5px_10px]">
+                                        <div className="title text-xl text-sky-500 font-semibold mb-[10px]">{element.title}</div>
+                                        <div className="description text-sky-300 font-light">
+                                            {element.description}
+                                        </div>
 									</div>
 								</div>
 							)	
@@ -197,20 +182,48 @@ export default function Form(){
 
 	const nextButton = () => {
 		return (step == 2) 
-			? <button className="block bg-sky-500 rounded-md px-2 py-1 text-gray-100" onClick={handleSubmit}>Save</button>
-			: <button className="block bg-sky-500 rounded-md px-2 py-1 text-gray-100" onClick={next}>Next</button>
+			? <button className="base-background rounded-md px-2 py-1 text-slate-50 w-2/5" onClick={handleSubmit}>Save</button>
+			: <button className="base-background rounded-md px-2 py-1 text-slate-50 w-2/5" onClick={next}>Next</button>
 	}
 
 	return (
 		<section>
-			<div className="bg-form h-screen bg-gray-800 flex items-center">
-				<div className="container mx-auto">
-					<div className="form mx-auto w-2/3 bg-gray-100 p-5 rounded-xl shadow">
-						{form()}
-						<div className="w-1/3 mx-auto flex justify-between my-[10px]">
-							<button className="block bg-gray-100 rounded-md px-2 py-1 text-sky-500 border-solid border-2 border-sky-500" onClick={prev}>Back</button>
-							{nextButton()}
-						</div>
+            <div className="bg-form h-screen base-background flex items-center">
+                <div className="w-full flex justify-end">
+                    <div className="w-1/2 p-5 h-screen relative">
+                        <div className="form mx-auto p-[50px] h-full bg-slate-50 w-full rounded-lg shadow flex items-center justify-center flex-row">
+                            <div className="absolute left-10 translate-x-[-100%]">
+                                <div className="flex items-center">
+                                    <span className={`mr-[25px] text-slate-50 ${step == 0 ? 'font-semibold' :'font-light' }`}>Data dasar milik pengguna yang akan digunakan sebagai variabel dalam menghitung formula bmi</span>
+                                    <div className={`my-[50px] ${step == 0 ? 'bg-indigo-500' : 'bg-slate-50'} border-4 border-indigo-500 w-[50px] h-[50px] rounded-full flex justify-center items-center`}>
+                                        <span className={`text-lg font-bold ${step == 0 ? 'text-slate-50' :'text-indigo-500' }`}>1</span>
+                                    </div>
+                                </div>
+                                <div className="flex items-center">
+                                    <span className={`mr-[25px] text-slate-50 ${step == 1 ? 'font-semibold' :'font-light' }`}>Body preference yang dinginkan oleh pengguna sebagai parameter pencapaian bentuk tubuh impian</span>
+                                    <div className={`my-[50px] ${step == 1 ? 'bg-indigo-500' : 'bg-slate-50'} border-4 border-indigo-500 w-[50px] h-[50px] rounded-full flex justify-center items-center`}>
+                                        <span className={`text-lg font-bold ${step == 1 ? 'text-slate-50' :'text-indigo-500' }`}>2</span>
+                                    </div>
+                                </div>
+                                <div className="flex items-center">
+                                    <span className={`mr-[25px] text-slate-50 ${step == 2 ? 'font-semibold' :'font-light' }`}>Level kesulitan yang disesuaikan dengan kemampuan yang dimiliki oleh pengguna</span>
+                                    <div className={`my-[50px] ${step == 2 ? 'bg-indigo-500' : 'bg-slate-50'} border-4 border-indigo-500 w-[50px] h-[50px] rounded-full flex justify-center items-center`}>
+                                        <span className={`text-lg font-bold ${step == 2 ? 'text-slate-50' :'text-indigo-500' }`}>3</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>                            
+                                <div className="text-container text-center">
+                                    <Image src="/assets/img/Logo.png" width={75} height={75} className="mx-auto"/>
+                                    <h1 className="text-sky-900 text-2xl">Personal Data Collection Stage</h1>
+                                </div>
+                                {form()}
+                                <div className="flex justify-between my-[10px]">
+                                    <button className="rounded-md px-2 py-1 text-indigo-500 border-2 border-indigo-500 w-2/5" onClick={prev}>Back</button>
+                                    {nextButton()}
+                                </div>
+                            </div>
+                        </div>
 					</div>
 				</div>
 			</div>
