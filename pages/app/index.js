@@ -25,8 +25,22 @@ export default function Dashboard(){
             
                 if(localStorage.getItem('calories_consumption') === null)
                     localStorage.setItem('calories_consumption', 0)
-                    
-                setCal(localStorage.getItem('calories_consumption'))
+                
+                await fetch('http://localhost:5000/food-log', {
+                  method: 'GET',
+                  headers: {
+                    'Content-Type': 'application/json',
+                    'authorization': `Bearer ${localStorage.getItem("access-token")}`,
+                  },
+                })
+                .then(async (res)=>{
+                    await res.json().then(async (data)=>{
+                        if (data.length > 0) {
+                            localStorage.setItem('calories_consumption',data.map((e) => e.cal).reduce((a,b) => a+b))
+                            setCal(localStorage.getItem('calories_consumption'))
+                        }
+                    })
+                })
             })
         }
         getUserData()
