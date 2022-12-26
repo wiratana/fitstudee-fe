@@ -100,7 +100,6 @@ export default function Excercise(){
             'authorization': `Bearer ${localStorage.getItem("access-token")}`,
           }
         }).then((res)=>{
-            console.log(res)
             loadExcerciseLogs()
         })
     }
@@ -114,6 +113,8 @@ export default function Excercise(){
         }}).then(async(res) => await res.json().then(async (data)=>{
             if(data.length > 0)
                 setBurnedCalories(data.map(e=>e.burn).reduce((a,b)=>a+b))
+            else
+                setBurnedCalories(0)
             setExcerciseLogs(data)
         }))
     }
@@ -156,7 +157,7 @@ export default function Excercise(){
 			return levelPack.excercises ? (
 				<section>
                     <button className={`w-[50px] h-[50px] base-background absolute left-[5px] top-[5px] rounded-full text-slate-50 shadow text-lg`} onClick={()=>router.back()}>Back</button>
-                    <div className={`bg-form ${excerciseLogs > 5 ? 'h-full' : 'h-screen'} base-background flex items-center flex-col`}>
+                    <div className={`bg-form ${excerciseLogs.length > 5 || excercises.length > 5 ? 'h-full' : 'h-screen'} base-background flex items-center flex-col`}>
 						<div className="container mx-auto p-5">
 							<div className="form mx-auto w-full bg-gray-100 p-5 rounded-xl shadow flex">
                                 <div className="w-1/2">
@@ -247,6 +248,7 @@ export default function Excercise(){
             console.log(time)
 			return (
 				<section>
+                    <button className={`w-[50px] h-[50px] base-background absolute left-[5px] top-[5px] rounded-full text-slate-50 shadow text-lg`} onClick={()=>setCurrentState(0)}>Back</button>
 					<div className={`bg-form ${excercises.length > 50 ? 'h-full' : 'h-screen'} base-background flex items-center flex-col`}>
 						<div className="container mx-auto my-5">
 							<div className="form mx-auto w-2/3 bg-gray-100 p-3 rounded-xl shadow flex">
@@ -261,22 +263,25 @@ export default function Excercise(){
                                             setTimerStatus(Number(!timerStatus))
                                         else
                                             setCurrentState((currentState+1) % 2)
-                                        handleSubmit()
+                                        if(!time)
+                                            handleSubmit()
                                         localStorage.setItem("calories_burned", storedTime)
                                     }}>{time ? timerStatus ? 'Pause' : 'Play' : 'Finish'}</button>
                                 </div>
-								<div className="w-1/2 flex flex-wrap">
-                                    {excercises ? excercises.map((excercise, i) => {
-                                        return (
-                                            <div key={excercise._id} className={"card group duration-700"}>
-                                                <div className={`flex m-[10px] p-[10px] bg-gray-900 duration-300 rounded-md align-center flex-col hover:scale-110`}>
-                                                    <div className="text-container text-sky-400 flex items-center w-full justify-between">
-                                                        <div className="title inline-block">{excercise.name}</div>
+								<div className="w-1/2">
+                                    <div className="flex flex-wrap">
+                                        {excercises ? excercises.map((excercise, i) => {
+                                            return (
+                                                <div key={excercise._id} className={"card group duration-700"}>
+                                                    <div className={`flex m-[10px] p-[10px] bg-gray-900 duration-300 rounded-md align-center flex-col hover:scale-110`}>
+                                                        <div className="text-container text-sky-400 flex items-center w-full justify-between">
+                                                            <div className="title inline-block">{excercise.name}</div>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        )
-                                    }) : ''}
+                                            )
+                                        }) : ''}
+                                    </div>
                                 </div>
 							</div>
 						</div>
