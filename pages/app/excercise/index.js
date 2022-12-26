@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import Image from 'next/image'
+import {useRouter} from 'next/router'
 
 const excerciseLists = [
 	{
@@ -36,6 +37,7 @@ const excerciseLists = [
 ]
 
 export default function Excercise(){
+    const router = useRouter()
 	const [currentState, setCurrentState] = useState(0)
 	const [calories, setCalories] = useState(0)
 	const [burnedCalories, setBurnedCalories] = useState(0)
@@ -57,6 +59,7 @@ export default function Excercise(){
         })
         .then(async (res)=>{
             await res.json().then(async (data)=>{
+                setCalories(Math.floor(data.detail.calories_need/4))
                 let level = data.detail.level
                 await fetch(`http://localhost:5000/body-pref/${data.detail.body_preference}`)
                 .then(async (res) => {
@@ -96,7 +99,10 @@ export default function Excercise(){
           headers: {
             'authorization': `Bearer ${localStorage.getItem("access-token")}`,
           }
-        }).then(()=>loadExcerciseLogs())
+        }).then((res)=>{
+            console.log(res)
+            loadExcerciseLogs()
+        })
     }
     
     const loadExcerciseLogs = async () => {
@@ -105,8 +111,11 @@ export default function Excercise(){
             headers: {
                 'Content-Type': 'application/json',
                 'authorization': `Bearer ${localStorage.getItem("access-token")}`,
-          },
-        }).then(async(res) => await res.json().then(async (data)=>setExcerciseLogs(data)))
+        }}).then(async(res) => await res.json().then(async (data)=>{
+            if(data.length > 0)
+                setBurnedCalories(data.map(e=>e.burn).reduce((a,b)=>a+b))
+            setExcerciseLogs(data)
+        }))
     }
     
     const ExcerciseLogSeeder = async () => {
@@ -144,91 +153,90 @@ export default function Excercise(){
 
 	const render = () => {
 		if(currentState == 0){
-            console.log(time)
 			return levelPack.excercises ? (
 				<section>
-					<div className="bg-form h-full bg-gray-800 flex items-center flex-col">
-                        <div className="container mx-auto mt-[100px]">
-							<div className="flex-col form mx-auto w-2/3 bg-gray-100 p-5 rounded-xl shadow flex">
-                                <button className="bg-sky-900 px-[10px] py-[5px] hover:rounded-3xl duration-300 rounded-md hover:bg-red-500 hover:text-white" onClick={ExcerciseLogSeeder}>Seed Data</button>
+                    <button className={`w-[50px] h-[50px] base-background absolute left-[5px] top-[5px] rounded-full text-slate-50 shadow text-lg`} onClick={()=>router.back()}>Back</button>
+                    <div className={`bg-form ${excerciseLogs > 5 ? 'h-full' : 'h-screen'} base-background flex items-center flex-col`}>
+						<div className="container mx-auto p-5">
+							<div className="form mx-auto w-full bg-gray-100 p-5 rounded-xl shadow flex">
+                                <div className="w-1/2">
+                                    <div className="text-container text-center">
+                                        <Image src="/assets/img/Logo.png" width={75} height={75} className="mx-auto"/>
+                                        <h1 className="text-sky-900 text-2xl">FitStudee</h1>
+                                    </div>
+                                    <div className="w-1/2 p-[20px] shadow base-background text-white rounded mx-auto text-center my-[20px]">
+                                        <span className="text-2xl">&#128170;</span> Kalori Terbakar : <span className="text-lg font-bold">{burnedCalories}</span>/<span className="text-md">{calories}</span>
+                                    </div>
+                                </div>
+                                <div className="w-1/2">
+                                    <div className="flex flex-wrap">
+                                        {levelPack.excercises.map(function(excercise,i){
+                                            return (
+                                                <div key={excercise.name} className={"card group duration-700 m-[10px] p-[10px] bg-gray-900 hover:scale-110 duration-300 rounded-md align-center"} onClick={()=> {
+                                                    let arr = [...excercises]
+                                                    arr.push(excercise)
+                                                    setExcercises(arr)
+                                                    setBurnedCalories(parseInt(burnedCalories) + parseInt(excercise.burn))
+                                                }}>
+                                                    <div className="text-container text-sky-400 flex items-center">
+                                                        <div className="title inline-block">{excercise.name}</div>
+                                                    </div>
+                                                </div>
+                                            )	
+                                        })}
+                                    </div>
+                                </div>
 							</div>
 						</div>
-						<div className="container mx-auto mt-[100px]">
-							<div className="flex-col form mx-auto w-2/3 bg-gray-100 p-5 rounded-xl shadow flex">
-								<div className="w-1/2 p-[20px] bg-sky-500 text-white rounded mx-auto text-center my-[20px]">{`${burnedCalories}/${calories}`}</div>
-							</div>
-						</div>
-						<div className="container mx-auto my-[100px]">
-							<div className="flex-col form mx-auto w-2/3 bg-gray-100 p-5 rounded-xl shadow flex">
-								{levelPack.excercises.map(function(excercise,i){
-									return (
-										<div key={excercise.name} className={"card  group hover:w-full duration-700"} onClick={()=> {
-                                            let arr = [...excercises]
-                                            arr.push(excercise)
-                                            setExcercises(arr)
-											setBurnedCalories(parseInt(burnedCalories) + parseInt(excercise.burn))
-										}}>
-											<div className={`flex m-[10px] p-[10px] hover:m-[0px] bg-gray-900 hover:p-[20px] hover:rounded-3xl duration-300 rounded-md align-center`}>
-												<div className="img-container w-fit">
-												</div>
-												<div className="text-container text-sky-400 flex items-center">
-													<div className="title inline-block">{excercise.name}</div>
-												</div>
-											</div>
-										</div>
-									)	
-								})}
-							</div>
-						</div>
-						<div className="container mx-auto mb-[100px]">
-							<div className="flex-col form mx-auto w-2/3 bg-gray-100 p-5 rounded-xl shadow flex">
-								{excercises ? excercises.map((excercise, i) => {
-									return (
-										<div key={excercise._id} className={"card  group hover:w-full duration-700"}>
-											<div className={`flex m-[10px] p-[10px] hover:m-[0px] bg-gray-900 hover:p-[20px] hover:rounded-3xl duration-300 rounded-md align-center flex-col`}>
-												<div className="img-container w-fit">
-                                                
-												</div>
-												<div className="text-container text-sky-400 flex items-center w-full justify-between">
-													<div className="title inline-block">{excercise.name}</div>
-													<div className="delete-button"><button className="bg-sky-900 px-[10px] py-[5px] hover:rounded-3xl duration-300 rounded-md hover:bg-red-500 hover:text-white"
-														onClick={()=> {
-															setBurnedCalories(parseInt(burnedCalories) - parseInt(excercise.burn))
-                                                            let arr = [...excercises]
-                                                            arr.splice(i, 1)
-                                                            setExcercises(arr)
-                                                        }}>X</button></div>
-												</div>
-											</div>
-										</div>
-									)
-								}) : ''}
-								<button className={`m-[10px] p-[10px] hover:bg-gray-500 duration-300 rounded-md align-center text-white w-1/3 mx-auto ${excercises.length == 0 ? 'bg-gray-500' : 'bg-gray-900'}`} onClick={() => {
-									setTime(excercises.map((e)=>parseInt(e.duration)).reduce((a,b) => a + b))
-                                    setStoredTime(time)
-									setCurrentState((currentState+1) % 2)
-								}} disabled={excercises.length <= 0 ? true : false}>Start</button>
-							</div>
-						</div>
-                        <div className="container mx-auto mb-[100px]">
-							<div className="flex-col form mx-auto w-2/3 bg-gray-100 p-5 rounded-xl shadow flex">
-								{excerciseLogs ? excerciseLogs.map((excercise, i) => {
-									return (
-										<div key={excercise._id} className={"card  group hover:w-full duration-700"}>
-											<div className={`flex m-[10px] p-[10px] hover:m-[0px] bg-gray-900 hover:p-[20px] hover:rounded-3xl duration-300 rounded-md align-center flex-col`}>
-												<div className="img-container w-fit">
-                                                
-												</div>
-												<div className="text-container text-sky-400 flex items-center w-full justify-between">
-													<div className="title inline-block">{excercise.name}</div>
-													<div className="delete-button"><button className="bg-sky-900 px-[10px] py-[5px] hover:rounded-3xl duration-300 rounded-md hover:bg-red-500 hover:text-white"
-														onClick={()=> {deleteItem(excercise)}}>X</button></div>
-												</div>
-											</div>
-										</div>
-									)
-								}) : ''}
-							</div>
+						<div className="container mx-auto my-[50px] flex flex-wrap">
+                            <div className="w-1/2 mx-auto">
+                                <div className="form bg-gray-100 p-5 rounded-xl shadow">
+                                    <div className="flex flex-wrap">
+                                        {excercises ? excercises.map((excercise, i) => {
+                                            return (
+                                                <div key={excercise._id} className={"card group duration-700"}>
+                                                    <div className={`flex m-[10px] p-[10px] bg-gray-900 duration-300 rounded-md align-center flex-col hover:scale-110`}>
+                                                        <div className="text-container text-sky-400 flex items-center w-full justify-between">
+                                                            <div className="title inline-block mr-3">{excercise.name}</div>
+                                                            <div className="delete-button"><button className="bg-sky-900 px-[10px] py-[5px] hover:rounded-3xl duration-300 rounded-md hover:bg-red-500 hover:text-white"
+                                                                onClick={()=> {
+                                                                    setBurnedCalories(parseInt(burnedCalories) - parseInt(excercise.burn))
+                                                                    let arr = [...excercises]
+                                                                    arr.splice(i, 1)
+                                                                    setExcercises(arr)
+                                                                }}>X</button></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            )
+                                        }) : ''}
+                                    </div>
+                                    <button className={`block w-full m-[10px] p-[10px] hover:bg-gray-500 duration-300 rounded-md align-center text-white w-1/3 mx-auto ${excercises.length == 0 ? 'bg-gray-500' : 'base-background'}`} onClick={() => {
+                                        setTime(excercises.map((e)=>parseInt(e.duration)).reduce((a,b) => a + b))
+                                        setStoredTime(time)
+                                        setCurrentState((currentState+1) % 2)
+                                    }} disabled={excercises.length <= 0 ? true : false}>Start</button>
+                                </div>
+                            </div>
+                            <div className="w-2/5 mx-auto">
+                                <div className="flex-col form bg-gray-100 p-5 rounded-xl shadow flex">
+                                    {excerciseLogs ? excerciseLogs.map((excercise, i) => {
+                                        return (
+                                            <div key={excercise._id} className={"card  group hover:w-full duration-700"}>
+                                                <div className={`flex m-[10px] p-[10px] hover:m-[0px] bg-gray-900 hover:p-[20px] hover:rounded-3xl duration-300 rounded-md align-center flex-col`}>
+                                                    <div className="text-container text-sky-400 flex items-center w-full justify-between">
+                                                        <div className="title inline-block">{excercise.name}</div>
+                                                        <div className="delete-button"><button className="bg-sky-900 px-[10px] py-[5px] hover:rounded-3xl duration-300 rounded-md hover:bg-red-500 hover:text-white"
+                                                            onClick={()=> {
+                                                                deleteItem(excercise)
+                                                            }}>X</button></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )
+                                    }) : ''}
+                                </div>
+                            </div>
 						</div>
 					</div>
 				</section>
@@ -239,33 +247,37 @@ export default function Excercise(){
             console.log(time)
 			return (
 				<section>
-					<div className="bg-form h-full bg-gray-800 flex items-center flex-col">
-						<div className="container mx-auto mt-[100px]">
-							<div className="flex-col form mx-auto w-2/3 bg-gray-100 p-5 rounded-xl shadow flex">
-								<div className="w-1/2 p-[20px] bg-sky-500 text-white rounded mx-auto text-center my-[20px]">Duration : {time}</div>
-								<div className="w-1/2 p-[20px] bg-sky-500 text-white rounded mx-auto text-center my-[20px]">5000/1000</div>
-								<button className={`m-[10px] p-[10px] hover:bg-gray-500 duration-300 rounded-md align-center text-white w-1/3 mx-auto ${excercises.size == 0 ? 'bg-gray-500' : 'bg-gray-900'}`} onClick={() => {
-									if(time) 
-										setTimerStatus(Number(!timerStatus))
-									else
-										setCurrentState((currentState+1) % 2)
-                                    handleSubmit()
-                                    localStorage.setItem("calories_burned", storedTime)
-								}}>{time ? timerStatus ? 'Pause' : 'Play' : 'Finish'}</button>
-							</div>
-						</div>
-						<div className="container mx-auto my-[100px]">
-							<div className="flex-col form mx-auto w-2/3 bg-gray-100 p-5 rounded-xl shadow flex">
-								{excercises.map(function(excercise){
-									return (
-										<div key={`track-${excercise._id}`} className={"card  group hover:w-full duration-700"}>
-											<div className={`flex m-[10px] p-[10px] hover:m-[0px] bg-gray-900 hover:p-[20px] hover:rounded-3xl duration-300 rounded-md align-center flex-col`}><div className="text-container text-sky-400 flex items-center w-full justify-between">
-													<div className="title inline-block">{excercise.name}</div>
-												</div>
-											</div>
-										</div>
-									)
-								})}
+					<div className={`bg-form ${excercises.length > 50 ? 'h-full' : 'h-screen'} base-background flex items-center flex-col`}>
+						<div className="container mx-auto my-5">
+							<div className="form mx-auto w-2/3 bg-gray-100 p-3 rounded-xl shadow flex">
+                                <div className="w-1/2 p-5">
+                                    <div className="text-container text-center mb-[50px]">
+                                        <Image src="/assets/img/Logo.png" width={75} height={75} className="mx-auto"/>
+                                        <h1 className="text-sky-900 text-2xl">FitStudee</h1>
+                                    </div>
+                                    <div className="w-[200px] h-[200px] p-[20px] base-background text-white rounded-full mx-auto text-center my-[20px] text-[64px] flex justify-center items-center border-8"><div>{time}</div></div>
+                                    <button className={`mx-auto w-full m-[10px] p-[10px] hover:bg-gray-500 duration-300 rounded-md align-center text-white w-1/3 mx-auto ${excercises.size == 0 ? 'bg-gray-500' : 'base-background'} text-xl`} onClick={() => {
+                                        if(time) 
+                                            setTimerStatus(Number(!timerStatus))
+                                        else
+                                            setCurrentState((currentState+1) % 2)
+                                        handleSubmit()
+                                        localStorage.setItem("calories_burned", storedTime)
+                                    }}>{time ? timerStatus ? 'Pause' : 'Play' : 'Finish'}</button>
+                                </div>
+								<div className="w-1/2 flex flex-wrap">
+                                    {excercises ? excercises.map((excercise, i) => {
+                                        return (
+                                            <div key={excercise._id} className={"card group duration-700"}>
+                                                <div className={`flex m-[10px] p-[10px] bg-gray-900 duration-300 rounded-md align-center flex-col hover:scale-110`}>
+                                                    <div className="text-container text-sky-400 flex items-center w-full justify-between">
+                                                        <div className="title inline-block">{excercise.name}</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )
+                                    }) : ''}
+                                </div>
 							</div>
 						</div>
 					</div>
