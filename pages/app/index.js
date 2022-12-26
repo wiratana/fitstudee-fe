@@ -34,29 +34,29 @@ export default function Dashboard(){
     
 	return (
 		<section>
-			<div className="bg-form h-screen base-background flex items-center flex-col">
+			<div className="bg-form h-full base-background flex items-center flex-col">
 				<div className="container mx-auto my-5">
-					<div className="flex-col form mx-auto w-2/3 bg-gray-100 p-5 rounded-xl shadow flex">
+					<div className="flex-col form mx-auto w-2/3 bg-gray-100 p-5 rounded-xl shadow flex mb-[20px]">
                         <div className="text-container text-center">
                             <Image src="/assets/img/Logo.png" width={75} height={75} className="mx-auto"/>
-                            <h1 className="text-sky-900 text-2xl">Welcome To FitStudee</h1>
+                            <h1 className="text-sky-900 text-2xl">FitStudee</h1>
                         </div>
-						<div className="w-1/2 p-[20px] base-background text-white rounded mx-auto text-center my-[20px]">{cal}/{calNeed}</div>
+						<div className="w-1/2 p-[20px] base-background text-white rounded mx-auto text-center my-[20px] shadow"><span className="text-2xl">&#127838;</span> Konsumsi Kalori : <span className="text-lg font-bold">{cal}</span>/<span className="text-md">{calNeed}</span></div>
 						<div className="text-container flex justify-around">
-                            <Link href="/app/food" className={`block shadow rounded-md overflow-hidden m-[10px] base-background card w-1/3 pb-[10px] hover:drop-shadow-2xl duration-300`}>
-                                <Image src="/assets/img/example.jpeg" width={300} height={300} className="object-fill"/>
+                            <Link href="/app/food" className={`block shadow rounded-md overflow-hidden m-[10px] base-background card w-1/3 pb-[10px] hover:drop-shadow-2xl hover:scale-110 duration-300`}>
+                                <Image src="/assets/img/example2.jpeg" width={300} height={300} className="object-fill"/>
                                 <div className="text-container p-[5px_10px] text-xl text-slate-50 font-semibold text-center">
                                     Food
                                 </div>
                             </Link>
-                            <Link href="/app/excercise" className={`block shadow rounded-md overflow-hidden m-[10px] base-background card w-1/3 pb-[10px] hover:drop-shadow-2xl duration-300`}>
+                            <Link href="/app/excercise" className={`block shadow rounded-md overflow-hidden m-[10px] base-background card w-1/3 pb-[10px] hover:drop-shadow-2xl hover:scale-110 duration-300`}>
                                 <Image src="/assets/img/example.jpeg" width={300} height={300} className="object-fill"/>
                                 <div className="text-container p-[5px_10px] text-xl text-slate-50 font-semibold text-center">
                                     Excercise
                                 </div>
                             </Link>
-                            <Link href="/app/water" className={`block shadow rounded-md overflow-hidden m-[10px] base-background card w-1/3 pb-[10px] hover:drop-shadow-2xl duration-300`}>
-                                <Image src="/assets/img/example.jpeg" width={300} height={300} className="object-fill"/>
+                            <Link href="/app/water" className={`block shadow rounded-md overflow-hidden m-[10px] base-background card w-1/3 pb-[10px] hover:drop-shadow-2xl hover:scale-110 duration-300`}>
+                                <Image src="/assets/img/example3.jpg" width={300} height={300} className="object-fill"/>
                                 <div className="text-container p-[5px_10px] text-xl text-slate-50 font-semibold text-center">
                                     Water
                                 </div>
