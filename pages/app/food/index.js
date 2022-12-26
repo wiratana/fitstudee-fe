@@ -89,7 +89,7 @@ export default function Food(){
 	return levelPack.food_categories ? (
 		<section>
             <button className={`w-[50px] h-[50px] base-background absolute left-[5px] top-[5px] rounded-full text-slate-50 shadow text-lg`} onClick={()=>router.back()}>Back</button>
-			<div className="bg-form h-full base-background flex items-center flex-col py-5">
+			<div className={`bg-form ${nutritionLogs > 0 ? 'h-full' : 'h-screen'} base-background flex items-center flex-col py-5`}>
 				<div className="container mx-auto flex">
                     <div className="mx-auto w-2/5">
                         <div className="flex-col form bg-gray-100 p-5 rounded-xl shadow flex">
