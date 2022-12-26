@@ -114,8 +114,14 @@ export default function Form(){
 						</div>
                         <div className="input-group my-3">
 							<label htmlFor="age" className="block">Sex</label>
-                            <input type="radio" name="gender" value="male" onClick={event => setSex(event.target.value)}/> Male
-                            <input type="radio" name="gender" value="female" onClick={event => setSex(event.target.value)}/> Female
+                            <div className="flex">
+                                <div className="mr-[20px]">
+                                    <input type="radio" name="gender" value="male" onClick={event => setSex(event.target.value)}/> Male
+                                </div>
+                                <div>
+                                    <input type="radio" name="gender" value="female" onClick={event => setSex(event.target.value)}/> Female
+                                </div>
+                            </div>
                         </div>
 					</div>
 				</div>
@@ -127,7 +133,7 @@ export default function Form(){
 					<div className="card-container flex justify-center">
 						{bodyPreferences.map(function(element,i){
 							return (
-								<div key={`${i}-${element.name}`} className={`shadow rounded-md overflow-hidden m-[10px] ${preference == element._id ? 'bg-slate-500' : 'bg-slate-900'} card w-1/${bodyPreferences.length} pb-[10px] hover:drop-shadow-2xl duration-300`} onClick={() => setPreference(element._id)}>
+								<div key={`${i}-${element.name}`} className={`shadow rounded-md overflow-hidden m-[10px] ${preference == element._id ? 'bg-slate-700' : 'bg-slate-900'} card w-1/${bodyPreferences.length} pb-[10px] hover:drop-shadow-2xl hover:scale-110 duration-300`} onClick={() => setPreference(element._id)}>
                                     <Image src="/assets/img/example.jpeg" width={200} height={200} className="object-fill"/>
 									<div className="text-container p-[5px_10px]">
                                         <div className="title text-xl text-sky-500 font-semibold mb-[10px]">{element.name}</div>
@@ -148,7 +154,7 @@ export default function Form(){
 					<div className="card-container flex">
 						{levels.map(function(element,i){
 							return (
-								<div key={element.title} className={`shadow rounded-md overflow-hidden m-[10px] ${level == element.id ? 'bg-slate-500' : 'bg-slate-900'} card w-1/${levels.length} pb-[10px] hover:drop-shadow-2xl duration-300`} onClick={() => setLevel(element.id)}>
+								<div key={element.title} className={`shadow rounded-md overflow-hidden m-[10px] ${level == element.id ? 'bg-slate-700' : 'bg-slate-900'} card w-1/${levels.length} pb-[10px] hover:drop-shadow-2xl hover:scale-110 duration-300`} onClick={() => setLevel(element.id)}>
                                     <Image src="/assets/img/example.jpeg" width={200} height={200} className="object-fill"/>
                                     <div className="text-container p-[5px_10px]">
                                         <div className="title text-xl text-sky-500 font-semibold mb-[10px]">{element.title}</div>
@@ -195,20 +201,26 @@ export default function Form(){
                             <div className="absolute left-10 translate-x-[-100%]">
                                 <div className="flex items-center">
                                     <span className={`mr-[25px] text-slate-50 ${step == 0 ? 'font-semibold' :'font-light' }`}>Data dasar milik pengguna yang akan digunakan sebagai variabel dalam menghitung formula bmi</span>
-                                    <div className={`my-[50px] ${step == 0 ? 'bg-indigo-500' : 'bg-slate-50'} border-4 border-indigo-500 w-[50px] h-[50px] rounded-full flex justify-center items-center`}>
-                                        <span className={`text-lg font-bold ${step == 0 ? 'text-slate-50' :'text-indigo-500' }`}>1</span>
+                                    <div>
+                                        <div className={`my-[50px] ${step == 0 ? 'bg-indigo-500' : 'bg-slate-50'} border-4 border-indigo-500 w-[50px] h-[50px] rounded-full flex justify-center items-center`}>
+                                            <span className={`text-lg font-bold ${step == 0 ? 'text-slate-50' :'text-indigo-500' }`}>1</span>
+                                        </div>
                                     </div>
                                 </div>
                                 <div className="flex items-center">
                                     <span className={`mr-[25px] text-slate-50 ${step == 1 ? 'font-semibold' :'font-light' }`}>Body preference yang dinginkan oleh pengguna sebagai parameter pencapaian bentuk tubuh impian</span>
-                                    <div className={`my-[50px] ${step == 1 ? 'bg-indigo-500' : 'bg-slate-50'} border-4 border-indigo-500 w-[50px] h-[50px] rounded-full flex justify-center items-center`}>
-                                        <span className={`text-lg font-bold ${step == 1 ? 'text-slate-50' :'text-indigo-500' }`}>2</span>
+                                    <div>
+                                        <div className={`my-[50px] ${step == 1 ? 'bg-indigo-500' : 'bg-slate-50'} border-4 border-indigo-500 w-[50px] h-[50px] rounded-full flex justify-center items-center`}>
+                                            <span className={`text-lg font-bold ${step == 1 ? 'text-slate-50' :'text-indigo-500' }`}>2</span>
+                                        </div>
                                     </div>
                                 </div>
                                 <div className="flex items-center">
                                     <span className={`mr-[25px] text-slate-50 ${step == 2 ? 'font-semibold' :'font-light' }`}>Level kesulitan yang disesuaikan dengan kemampuan yang dimiliki oleh pengguna</span>
-                                    <div className={`my-[50px] ${step == 2 ? 'bg-indigo-500' : 'bg-slate-50'} border-4 border-indigo-500 w-[50px] h-[50px] rounded-full flex justify-center items-center`}>
-                                        <span className={`text-lg font-bold ${step == 2 ? 'text-slate-50' :'text-indigo-500' }`}>3</span>
+                                    <div>
+                                        <div className={`my-[50px] ${step == 2 ? 'bg-indigo-500' : 'bg-slate-50'} border-4 border-indigo-500 w-[50px] h-[50px] rounded-full flex justify-center items-center`}>
+                                            <span className={`text-lg font-bold ${step == 2 ? 'text-slate-50' :'text-indigo-500' }`}>3</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
