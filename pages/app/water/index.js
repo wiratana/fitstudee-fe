@@ -26,6 +26,8 @@ export default function Water(){
                     setLogs(e)
                     if(e.length > 0)
                         setTotal(e.map(e => parseInt(e.amount)).reduce((a,b)=> a + b))
+                    else
+                        setTotal(0)
                 })
             }
         })
